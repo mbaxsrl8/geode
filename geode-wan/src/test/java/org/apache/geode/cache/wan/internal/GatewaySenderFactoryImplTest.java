@@ -27,7 +27,6 @@ import org.junit.experimental.categories.Category;
 import org.apache.geode.Statistics;
 import org.apache.geode.StatisticsFactory;
 import org.apache.geode.cache.wan.GatewaySender;
-import org.apache.geode.cache.wan.internal.parallel.ParallelFixedAddressGatewaySenderImpl;
 import org.apache.geode.cache.wan.internal.parallel.ParallelGatewaySenderImpl;
 import org.apache.geode.cache.wan.internal.serial.SerialFixedAddressGatewaySenderImpl;
 import org.apache.geode.cache.wan.internal.serial.SerialGatewaySenderImpl;
@@ -97,22 +96,6 @@ public class GatewaySenderFactoryImplTest {
     assertThat(sender).isInstanceOf(SerialFixedAddressGatewaySenderImpl.class);
     SerialFixedAddressGatewaySenderImpl fixedAddressSender =
         (SerialFixedAddressGatewaySenderImpl) sender;
-    assertThat(fixedAddressSender.getRemoteReceiverHostname()).isEqualTo(TEST_HOSTNAME);
-    assertThat(fixedAddressSender.getRemoteReceiverPort()).isEqualTo(TEST_PORT);
-  }
-
-  @Test
-  public void parallelSenderWithFixedAddressCreatesParallelFixedAddressSender() {
-    factory.setReceiverHostname(TEST_HOSTNAME);
-    factory.setReceiverPort(TEST_PORT);
-    factory.setParallel(true);
-    factory.setManualStart(true);
-
-    GatewaySender sender = factory.create(SENDER_ID, REMOTE_DS_ID);
-
-    assertThat(sender).isInstanceOf(ParallelFixedAddressGatewaySenderImpl.class);
-    ParallelFixedAddressGatewaySenderImpl fixedAddressSender =
-        (ParallelFixedAddressGatewaySenderImpl) sender;
     assertThat(fixedAddressSender.getRemoteReceiverHostname()).isEqualTo(TEST_HOSTNAME);
     assertThat(fixedAddressSender.getRemoteReceiverPort()).isEqualTo(TEST_PORT);
   }

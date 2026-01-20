@@ -26,7 +26,6 @@ import org.apache.geode.cache.wan.GatewaySender;
 import org.apache.geode.cache.wan.GatewaySender.OrderPolicy;
 import org.apache.geode.cache.wan.GatewaySenderFactory;
 import org.apache.geode.cache.wan.GatewayTransportFilter;
-import org.apache.geode.cache.wan.internal.parallel.ParallelFixedAddressGatewaySenderImpl;
 import org.apache.geode.cache.wan.internal.parallel.ParallelGatewaySenderImpl;
 import org.apache.geode.cache.wan.internal.serial.SerialFixedAddressGatewaySenderImpl;
 import org.apache.geode.cache.wan.internal.serial.SerialGatewaySenderImpl;
@@ -303,11 +302,7 @@ public class GatewaySenderFactoryImpl implements InternalGatewaySenderFactory {
                 id, attrs.getOrderPolicy()));
       }
       if (cache instanceof GemFireCacheImpl) {
-        if (isFixedAddressConfigured()) {
-          sender = new ParallelFixedAddressGatewaySenderImpl(cache, statisticsClock, attrs);
-        } else {
-          sender = new ParallelGatewaySenderImpl(cache, statisticsClock, attrs);
-        }
+        sender = new ParallelGatewaySenderImpl(cache, statisticsClock, attrs);
         cache.addGatewaySender(sender);
 
         if (!attrs.isManualStart()) {
