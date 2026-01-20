@@ -27,6 +27,7 @@ import org.apache.geode.cache.wan.GatewaySender.OrderPolicy;
 import org.apache.geode.cache.wan.GatewaySenderFactory;
 import org.apache.geode.cache.wan.GatewayTransportFilter;
 import org.apache.geode.cache.wan.internal.parallel.ParallelGatewaySenderImpl;
+import org.apache.geode.cache.wan.internal.serial.SerialFixedAddressGatewaySenderImpl;
 import org.apache.geode.cache.wan.internal.serial.SerialGatewaySenderImpl;
 import org.apache.geode.distributed.internal.InternalDistributedSystem;
 import org.apache.geode.internal.cache.GemFireCacheImpl;
@@ -216,6 +217,22 @@ public class GatewaySenderFactoryImpl implements InternalGatewaySenderFactory {
   }
 
   @Override
+  public GatewaySenderFactory setReceiverHostname(String hostname) {
+    attrs.setRemoteReceiverHostname(hostname);
+    return this;
+  }
+
+  @Override
+  public GatewaySenderFactory setReceiverPort(int port) {
+    attrs.setRemoteReceiverPort(port);
+    return this;
+  }
+
+  private boolean isFixedAddressConfigured() {
+    return attrs.getRemoteReceiverHostname() != null && attrs.getRemoteReceiverPort() > 0;
+  }
+
+  @Override
   public GatewaySender create(String id, int remoteDSId) {
     int myDSId = InternalDistributedSystem.getAnyInstance().getDistributionManager()
         .getDistributedSystemId();
@@ -312,7 +329,11 @@ public class GatewaySenderFactoryImpl implements InternalGatewaySenderFactory {
         attrs.setOrderPolicy(GatewaySender.DEFAULT_ORDER_POLICY);
       }
       if (cache instanceof GemFireCacheImpl) {
-        sender = new SerialGatewaySenderImpl(cache, statisticsClock, attrs);
+        if (isFixedAddressConfigured()) {
+          sender = new SerialFixedAddressGatewaySenderImpl(cache, statisticsClock, attrs);
+        } else {
+          sender = new SerialGatewaySenderImpl(cache, statisticsClock, attrs);
+        }
         cache.addGatewaySender(sender);
         if (!attrs.isManualStart()) {
           sender.start();

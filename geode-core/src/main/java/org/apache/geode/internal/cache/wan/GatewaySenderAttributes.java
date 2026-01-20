@@ -92,6 +92,10 @@ public class GatewaySenderAttributes {
   private boolean enforceThreadsConnectSameReceiver =
       GatewaySender.DEFAULT_ENFORCE_THREADS_CONNECT_SAME_RECEIVER;
 
+  private String remoteReceiverHostname;
+
+  private int remoteReceiverPort = -1;
+
   public void setSocketBufferSize(int bufferSize) {
     socketBufferSize = bufferSize;
   }
@@ -194,6 +198,14 @@ public class GatewaySenderAttributes {
 
   public void setEnforceThreadsConnectSameReceiver(boolean enforcethreadsconnectsamereceiver) {
     enforceThreadsConnectSameReceiver = enforcethreadsconnectsamereceiver;
+  }
+
+  public void setRemoteReceiverHostname(String hostname) {
+    remoteReceiverHostname = hostname;
+  }
+
+  public void setRemoteReceiverPort(int port) {
+    remoteReceiverPort = port;
   }
 
   public int getSocketBufferSize() {
@@ -322,6 +334,14 @@ public class GatewaySenderAttributes {
 
   public boolean getEnforceThreadsConnectSameReceiver() {
     return enforceThreadsConnectSameReceiver;
+  }
+
+  public String getRemoteReceiverHostname() {
+    return remoteReceiverHostname;
+  }
+
+  public int getRemoteReceiverPort() {
+    return remoteReceiverPort;
   }
 
 }
