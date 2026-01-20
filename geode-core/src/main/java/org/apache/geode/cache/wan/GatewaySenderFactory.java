@@ -239,4 +239,25 @@ public interface GatewaySenderFactory {
    */
   GatewaySender create(String id, int remoteDSId);
 
+  /**
+   * Sets the hostname of the remote <code>GatewayReceiver</code> to which this
+   * <code>GatewaySender</code> will send events. When set, the sender will connect directly
+   * to this hostname instead of discovering receivers through locators.
+   *
+   * @param hostname the hostname of the remote <code>GatewayReceiver</code>
+   * @return this factory
+   */
+  GatewaySenderFactory setReceiverHostname(String hostname);
+
+  /**
+   * Sets the port of the remote <code>GatewayReceiver</code> to which this
+   * <code>GatewaySender</code> will send events. When set along with receiver hostname,
+   * the sender will connect directly to this address instead of discovering receivers
+   * through locators.
+   *
+   * @param port the port of the remote <code>GatewayReceiver</code>
+   * @return this factory
+   */
+  GatewaySenderFactory setReceiverPort(int port);
+
 }
